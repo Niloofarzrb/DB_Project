@@ -5,7 +5,7 @@ import warnings
 
 warnings.filterwarnings("ignore")
 
-engine = db.create_engine('mysql+pymysql://root:admin@localhost:3306/DB_0101?charset=utf8mb4')
+engine = db.create_engine('mysql+pymysql://root:Niloo8580far@localhost:3306/DB_0101?charset=utf8mb4')
 connection = engine.connect()
 
 IS_LOGGED_IN = False
@@ -50,7 +50,11 @@ def get_users():
 
 
 def get_categories():
-    pass
+    query = db.text('SELECT name FROM category')
+    raw_result = connection.execute(query)
+    result = raw_result.fetchall()
+    return result
+
 
 
 def get_orders():
@@ -107,5 +111,8 @@ if __name__ == '__main__':
             elif choice == '3':
                 users = map(lambda x: list(x), get_users())
                 print(tabulate(users, headers=['id', 'password']))
+            elif choice == '4':
+                categories = [category.values() for category in get_categories()]
+                print(tabulate(categories, headers=['name']))
         else:
             print('You are not logged in! Please login first!')
