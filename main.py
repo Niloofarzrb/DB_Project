@@ -87,6 +87,17 @@ def get_item_seller(item):
 def get_the_cheapest_seller_by_item(item):
     pass
 
+def avg_sell_by_supplier(item):
+    query = db.text(
+        'select name, date, avg(cart_item.total_cost) FROM product_supplier, cart'
+            'JOIN supplier ON product_supplier.supplier_idsupplier = supplier.idsupplier'
+            'JOIN cart_item On cart_item.idproduct_supplier = product_supplier.idproduct_supplier'
+            'JOIN cart ON cart_item.cart_idcart = cart.idcart'
+            'GROUP BY product_supplier.supplier_idsupplier, date')
+    raw_result = connection.execute(query, item=item)
+    result = raw_result.fetchall()
+    return result
+
 
 if __name__ == '__main__':
     print('Welcome to our shop!')
