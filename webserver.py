@@ -54,7 +54,6 @@ async def get_products():
         result = raw_result.fetchall()
     else:
         result = ['You are not logged in! Please login first!']
-
     return {'result': result, 'result_count': len(result)}
 
 
