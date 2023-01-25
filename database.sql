@@ -102,6 +102,7 @@ insert into supplier values(155 , 'haraati' , 0936584216 ,53 , 6);
 CREATE TABLE IF NOT EXISTS cart (
   idcart INT NOT NULL,
   cart_Detail LONGTEXT NOT NULL,
+  date DATETIME NULL,
   total_price INT NOT NULL,
   customer_idcustomer INT NOT NULL,
   customer_user_iduser INT NOT NULL,
@@ -120,12 +121,12 @@ CREATE TABLE IF NOT EXISTS cart (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
 
- INSERT INTO cart values (123 , '' ,  10000000 , 2 , 1 , 1100 );
- INSERT INTO cart values (345 , '' ,  2500000  , 5 , 2 , 1200 );
- INSERT INTO cart values (567 , '' ,  3700000 , 8 , 3 , 1300  );
- INSERT INTO cart values (789 , '' ,  5900000 , 11 , 4 , 1400  );
- INSERT INTO cart values (258  , '' ,  8700000 , 14 , 5 , 1500  );
- INSERT INTO cart values (369 , '' ,  9700000, 17 , 6 , 1600 );
+ INSERT INTO cart values (123 , ''  , '2022-08-15 02:41' , 10000000 , 2 , 1 , 1100 );
+ INSERT INTO cart values (345 , ''  , '2022-02-15 14:29' , 2500000  , 5 , 2 , 1200 );
+ INSERT INTO cart values (567 , ''  , '2022-05-15 06:41' , 3700000 , 8 , 3 , 1300  );
+ INSERT INTO cart values (789 , ''  , '2021-11-15 14:51' ,  5900000 , 11 , 4 , 1400  );
+ INSERT INTO cart values (258  , '' , '2022-03-15 16:51' ,  8700000 , 14 , 5 , 1500  );
+ INSERT INTO cart values (369 , ''  , '2022-03-12 16:51' ,  9700000, 17 , 6 , 1600 );
 
 CREATE TABLE IF NOT EXISTS post (
   delivery_code INT NOT NULL,
@@ -164,29 +165,6 @@ CREATE TABLE IF NOT EXISTS price_history (
  insert into price_history values('2022-05-15 06:41' , 2500000 , 153);
  insert into price_history values('2021-11-15 14:51' , 3500000 , 154 );
  insert into price_history values('2022-03-12 16:51' , 1200000 , 155 );
-
-CREATE TABLE IF NOT EXISTS cart_item (
-  idcart_item INT NOT NULL,
-  total_price INT NOT NULL,
-  sales_number INT NULL,
-  date DATETIME NULL,
-  total_cost INT NOT null,
-  cart_idcart INT NOT NULL,
-  PRIMARY KEY (idcart_item),
-  INDEX fk_cart_item_cart1_idx (cart_idcart ASC),
-  CONSTRAINT fk_cart_item_cart1
-    FOREIGN KEY (cart_idcart)
-    REFERENCES cart (idcart)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION);
-
-insert into cart_item values(1 , 10000000 , 5 , '2022-08-15 02:41' , 9000000 , 123);
-insert into cart_item values(2 , 2500000 , 2 , '2022-02-15 14:29' , 2000000  , 345);
-insert into cart_item values(3 , 3700000 , 3 , '2022-05-15 06:41', 2900000 , 567 );
-insert into cart_item values(4 , 5900000 , 1 , '2021-11-15 14:51' , 5100000  , 789);
-insert into cart_item values(5 , 8700000 , 3 , '2022-03-15 16:51' , 7500000 , 258);
-insert into cart_item values(6 , 9700000 , 2 , '2022-03-12 16:51' , 9100000 , 369);
-
 CREATE TABLE IF NOT EXISTS product (
   idproduct INT NOT NULL,
   color TINYTEXT NOT NULL,
@@ -195,11 +173,9 @@ CREATE TABLE IF NOT EXISTS product (
   model MEDIUMTEXT NOT NULL,
   ph_date DATETIME NOT NULL,
   supplier_idsupplier INT NOT NULL,
-  cart_item_idcart_item INT NOT NULL,
   PRIMARY KEY (idproduct),
   INDEX fk_product_price_history1_idx (ph_date ASC) ,
   INDEX fk_product_supplier1_idx (supplier_idsupplier ASC) ,
-  INDEX fk_product_cart_item1_idx (cart_item_idcart_item ASC) ,
   CONSTRAINT fk_product_price_history1
     FOREIGN KEY (ph_date)
     REFERENCES price_history (ph_date)
@@ -209,19 +185,75 @@ CREATE TABLE IF NOT EXISTS product (
     FOREIGN KEY (supplier_idsupplier)
     REFERENCES supplier (idsupplier)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT fk_product_cart_item1
-    FOREIGN KEY (cart_item_idcart_item)
-    REFERENCES cart_item (idcart_item)
+    ON UPDATE NO ACTION);
+
+INSERT INTO product values (1 , 'red' , '+' , 'galaxys7','sumsung' ,'2022-08-15 02:41' , 150);
+INSERT INTO product values (2 , 'gold' , '+'  ,'iphone12promax','iphone' ,'2021-07-15 12:32' , 151);
+INSERT INTO product values (3 , 'black' , '+'  ,'galaxynote10', 'sumsung' ,'2022-02-15 14:29' , 152);
+INSERT INTO product values (4 , 'white' , '+'  ,'iphonex','iphone' ,'2022-05-15 06:41' , 153);
+INSERT INTO product values (5 , 'black' , '+'  ,'sonyxperia','sony' ,'2021-11-15 14:51' , 154);
+INSERT INTO product values (6 , 'rosegold' , '+' , 'a7','sumsung' ,'2022-03-12 16:51' , 155);
+
+create table product_supplier
+(
+	idproduct_supplier int not null,
+    product_idproduct   int not null,
+    supplier_idsupplier int not null,
+    price               int not null,
+    primary key(idproduct_supplier),
+    constraint product_idproduct_fk
+        foreign key (product_idproduct) references product (idproduct),
+    constraint supplier_idsupplier_fk
+        foreign key (supplier_idsupplier) references supplier (idsupplier)
+);
+
+insert into product_supplier values(0,1, 150 , 15000000);
+insert into product_supplier values(1,1, 151 , 14900000);
+insert into product_supplier values(2,1, 152 , 16000000);
+insert into product_supplier values(3,1, 153 , 15500000);
+insert into product_supplier values(4,1, 154 , 17000000);
+insert into product_supplier values(5,1, 155 , 14000000);
+insert into product_supplier values(6,2, 150 , 80000000);
+insert into product_supplier values(7,2, 151 , 75000000);
+insert into product_supplier values(8,2, 152 , 68000000);
+insert into product_supplier values(9,3, 153 , 20000000);
+insert into product_supplier values(10,3, 154 , 22000000);
+insert into product_supplier values(11,3, 155 , 21000000);
+insert into product_supplier values(12,4, 150 , 35000000);
+insert into product_supplier values(13,4, 152 , 38000000);
+insert into product_supplier values(14,4, 154 , 37000000);
+insert into product_supplier values(15,5, 151 , 32000000);
+insert into product_supplier values(16,5, 153 , 38000000);
+insert into product_supplier values(17,6, 155 , 8000000);
+insert into product_supplier values(18,6, 150 , 6000000);
+
+
+
+CREATE TABLE IF NOT EXISTS cart_item (
+  idcart_item INT NOT NULL,
+  total_price INT NOT NULL,
+  sales_number INT NULL,
+  total_cost INT NOT null,
+  cart_idcart INT NOT NULL,
+  idproduct_supplier int not null,
+  PRIMARY KEY (idcart_item),
+constraint priduct_supplier_idproduct_supplier_fk
+        foreign key (idproduct_supplier)
+        references product_supplier (idproduct_supplier),
+  INDEX fk_cart_item_cart1_idx (cart_idcart ASC),
+  CONSTRAINT fk_cart_item_cart1
+    FOREIGN KEY (cart_idcart)
+    REFERENCES cart (idcart)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
 
-INSERT INTO product values (1 , 'red' , '+' , 'galaxys7','sumsung' ,'2022-08-15 02:41' , 150 , 1);
-INSERT INTO product values (2 , 'gold' , '+'  ,'iphone12promax','iphone' ,'2021-07-15 12:32' , 151 ,2 );
-INSERT INTO product values (3 , 'black' , '+'  ,'galaxynote10', 'sumsung' ,'2022-02-15 14:29' , 152 , 3 );
-INSERT INTO product values (4 , 'white' , '+'  ,'iphonex','iphone' ,'2022-05-15 06:41' , 153 , 4 );
-INSERT INTO product values (5 , 'black' , '+'  ,'sonyxperia','sony' ,'2021-11-15 14:51' , 154 , 5 );
-INSERT INTO product values (6 , 'rosegold' , '+' , 'a7','sumsung' ,'2022-03-12 16:51' , 155 , 6 );
+insert into cart_item values(1 , 10000000 , 5  , 9000000 , 123 ,0);
+insert into cart_item values(2 , 2500000 , 2  , 2000000  , 345 ,0);
+insert into cart_item values(3 , 3700000 , 3 , 2900000 , 567 ,1);
+insert into cart_item values(4 , 5900000 , 1  , 5100000  , 789 ,1);
+insert into cart_item values(5 , 8700000 , 3  , 7500000 , 258 ,2);
+insert into cart_item values(6 , 9700000 , 2  , 9100000 , 369 ,2);
+
 
 
 CREATE TABLE IF NOT EXISTS offer (
@@ -265,38 +297,6 @@ insert into category values(3 , 'honor-8-lite' , 3);
 insert into category values(4 , 'redmi-k60' , 4);
 insert into category values(5 , 'sumsung-galaxy-A52s' , 5);
 insert into category values(6, 'ipad-pro-12.9' , 6);
-
-create table product_supplier
-(
-    product_idproduct   int not null,
-    supplier_idsupplier int not null,
-    price               int not null,
-    constraint product_idproduct_fk
-        foreign key (product_idproduct) references product (idproduct),
-    constraint supplier_idsupplier_fk
-        foreign key (supplier_idsupplier) references supplier (idsupplier)
-);
-
-insert into product_supplier values(1, 150 , 15000000);
-insert into product_supplier values(1, 151 , 14900000);
-insert into product_supplier values(1, 152 , 16000000);
-insert into product_supplier values(1, 153 , 15500000);
-insert into product_supplier values(1, 154 , 17000000);
-insert into product_supplier values(1, 155 , 14000000);
-insert into product_supplier values(2, 150 , 80000000);
-insert into product_supplier values(2, 151 , 75000000);
-insert into product_supplier values(2, 152 , 68000000);
-insert into product_supplier values(3, 153 , 20000000);
-insert into product_supplier values(3, 154 , 22000000);
-insert into product_supplier values(3, 155 , 21000000);
-insert into product_supplier values(4, 150 , 35000000);
-insert into product_supplier values(4, 152 , 38000000);
-insert into product_supplier values(4, 154 , 37000000);
-insert into product_supplier values(5, 151 , 32000000);
-insert into product_supplier values(5, 153 , 38000000);
-insert into product_supplier values(6, 155 , 8000000);
-insert into product_supplier values(6, 150 , 6000000);
-
 
 
 
