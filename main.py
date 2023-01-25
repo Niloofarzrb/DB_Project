@@ -56,9 +56,11 @@ def get_categories():
     return result
 
 
-
 def get_orders():
-    pass
+    query = db.text('SELECT idcart, cart_Detail, total_price FROM cart')
+    raw_result = connection.execute(query)
+    result = raw_result.fetchall()
+    return result
 
 
 def get_the_best_users():
@@ -107,12 +109,17 @@ if __name__ == '__main__':
         elif IS_LOGGED_IN:
             if choice == '2':
                 products = [product.values() for product in get_products()]
-                print(tabulate(products, headers=['idproduct', 'color', 'available', 'price', 'name', 'model', 'ph_date']))
+                print(tabulate(products,
+                               headers=['idproduct', 'color', 'available', 'price', 'name', 'model', 'ph_date']))
             elif choice == '3':
                 users = map(lambda x: list(x), get_users())
                 print(tabulate(users, headers=['id', 'password']))
             elif choice == '4':
                 categories = [category.values() for category in get_categories()]
                 print(tabulate(categories, headers=['name']))
+            elif choice == '5':
+                orders = [order.values() for order in get_orders()]
+                print(tabulate(orders, headers=['idcart', 'cart_Detail', 'total_price']))
+
         else:
             print('You are not logged in! Please login first!')
