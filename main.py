@@ -73,7 +73,12 @@ def get_bestselling_products():
 
 def get_special_offer():
     # get list of products that have discount more than 15%
-    pass
+    query = db.text('SELECT product_idproduct as pro '
+                    'FROM offer '
+                    'WHERE discount_rate > 15')
+    raw_result = connection.execute(query)
+    result = raw_result.fetchall()
+    return result
 
 
 def get_item_seller(item):
