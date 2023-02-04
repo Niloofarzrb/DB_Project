@@ -63,8 +63,6 @@ def get_orders():
     raw_result = connection.execute(query)
     result = raw_result.fetchall()
     return result
-
-
 def get_special_offer():
     # get list of products that have discount more than 15%
     query = db.text('SELECT product_idproduct as pro '
@@ -73,46 +71,34 @@ def get_special_offer():
     raw_result = connection.execute(query)
     result = raw_result.fetchall()
     return result
-
-
 def get_item_sale(item):
     query = db.text('SELECT SUM(ci.total_price) as total_sales_per_month FROM product p'
-                    'JOIN product_supplier ps ON p.idproduct = ps.product_idproduct'
-                    'JOIN cart_item ci ON ps.idproduct_supplier = ci.idproduct_supplier'
-                    'JOIN cart c ON ci.cart_idcart = c.idcart'
-                    'WHERE p.name = :item'
-                    'AND c.date BETWEEN (NOW() - INTERVAL 1 MONTH) AND NOW()')
+    'JOIN product_supplier ps ON p.idproduct = ps.product_idproduct'
+    'JOIN cart_item ci ON ps.idproduct_supplier = ci.idproduct_supplier'
+    'JOIN cart c ON ci.cart_idcart = c.idcart'
+    'WHERE p.name = :item'
+    'AND c.date BETWEEN (NOW() - INTERVAL 1 MONTH) AND NOW()')
     raw_result = connection.execute(query, item=item)
     result = raw_result.fetchall()
     return result
-
-
-def get_supplier_product_for_admin(product):
-    query = db.text('SELECT supplier_idsupllier  '
-                    'FROM product_supplier as s'
-                    ' where s.product_idproduct = :product')
-    raw_result = connection.execute(query, product=product)
-    result = raw_result.fetchall()
-    return result
-
 
 def get_the_best_users():
     query = db.text('SELECT c.idcustomer , sum(b.price) as s '
                     'FROM customer as c '
                     'join cart on cart.idcostumer = c.idcustomer '
                     'join transaction as t on t.idcart = cart.idcart '
-                    'WHERE t.status = ' + ' and EXTRACT(WEEK FROM b.date) as w '
-                                          'FROM bill as b '
-                                          'group by c.idcustomer order by s desc limit 10')
+                    'WHERE t.status = '+' and EXTRACT(WEEK FROM b.date) as w '
+                    'FROM bill as b '
+                    'group by c.idcustomer order by s desc limit 10')
 
     query1 = db.text('SELECT cu.idcustomer , sum(b.price) as sum '
-                     'FROM customer as cu '
-                     'join cart on cart.idcostumer = cu.idcustomer '
-                     'join transaction as tr on tr.idcart = cart.idcart '
-                     'WHERE tr.status = ' + ' and EXTRACT(MONTH FROM b.date) as m '
-                                            'FROM bill as b '
-                                            'group by cu.idcustomer order by sum desc limit 10')
-    raw_result = connection.execute(query, query1)
+                    'FROM customer as cu '
+                    'join cart on cart.idcostumer = cu.idcustomer '
+                    'join transaction as tr on tr.idcart = cart.idcart '
+                    'WHERE tr.status = ' + ' and EXTRACT(MONTH FROM b.date) as m '
+                    'FROM bill as b '
+                    'group by cu.idcustomer order by sum desc limit 10')
+    raw_result = connection.execute(query , query1)
     result = raw_result.fetchall()
     return result
 
@@ -123,8 +109,8 @@ def get_bestselling_products():
                     'join product_supplier as ps on ps.idproduct_supplier = c.idproduct_supplier'
                     ' join product as p on p.idproduct = ps.product_idproduct'
                     'join transaction as tr'
-                    'WHERE tr.status =' + ' and  EXTRACT(WEEK FROM b.date) as w'
-                                          'group by p.idproduct order by s asc limit 5')
+                    'WHERE tr.status ='+' and  EXTRACT(WEEK FROM b.date) as w'
+                    'group by p.idproduct order by s asc limit 5')
 
     query = db.text('SELECT pr.idproduct , sum(ci.sales_number) as sum '
                     'FROM cart_item as ci '
@@ -132,7 +118,7 @@ def get_bestselling_products():
                     ' join product as pr on pr.idproduct = ps.product_idproduct'
                     ' join transaction as t'
                     ' WHERE t.status =' + ' and EXTRACT(MONTH FROM b.date) as m'
-                                          ' group by pr.idproduct order by sum asc limit 5')
+                    ' group by pr.idproduct order by sum asc limit 5')
     raw_result = connection.execute(query)
     result = raw_result.fetchall()
     return result
@@ -144,16 +130,10 @@ def get_item_seller(item):
     result = raw_result.fetchall()
     return result
 
-
-def get_the_cheapest_seller_by_item(product):
-    query = ('SELECT supplier_idsupplier , sum(s.price) as sum '
-             'FROM product_supplier as s '
-             'WHERE product_idproduct = :product and EXTRACT(MONTH FROM b.date) as m'
-             'group by supplier_idsupplier order by sum asc limit 1 ')
-    raw_result = connection.execute(query, product=product)
+def get_the_cheapest_seller_by_item(item):
+    raw_result = connection.execute(query , item = item)
     result = raw_result.fetchall()
     return result
-
 
 def avg_sell_by_supplier(item):
     query = db.text(
@@ -166,48 +146,39 @@ def avg_sell_by_supplier(item):
     result = raw_result.fetchall()
     return result
 
-
 def get_last_order(idcustomer):
     query = db.text('SELECT idorder_history FROM order_history where  idcustomer = :idcustomer '
                     'order  by sum(idorder_history) desc limit 10')
-    raw_result = connection.execute(query, idcustomer=idcustomer)
+    raw_result = connection.execute(query , idcustomer = idcustomer)
     result = raw_result.fetchall()
     return result
-
 
 def get_comment(idproduct):
     query = db.text('SELECT description FROM comment as c WHERE c.product_idproduct = :idproduct')
-    raw_result = connection.execute(query, idproduct=idproduct)
+    raw_result = connection.execute(query , idproduct = idproduct)
     result = raw_result.fetchall()
     return result
-
 
 def get_best_Score(idproduct):
-    query = db.text(
-        'SELECT descript FROM comment as c WHERE c.product_idproduct = :idproduct order by c.score desc limit 3')
-    raw_result = connection.execute(query, idproduct=idproduct)
+    query = db.text('SELECT descript FROM comment as c WHERE c.product_idproduct = :idproduct order by c.score desc limit 3')
+    raw_result = connection.execute(query , idproduct = idproduct)
     result = raw_result.fetchall()
     return result
-
-
 def get_bad_Score(idproduct):
-    query = db.text(
-        'SELECT descript FROM comment as c WHERE c.product_idproduct = :idproduct order by c.score asc limit 3')
-    raw_result = connection.execute(query, idproduct=idproduct)
+    query = db.text('SELECT descript FROM comment as c WHERE c.product_idproduct = :idproduct order by c.score asc limit 3')
+    raw_result = connection.execute(query , idproduct = idproduct)
     result = raw_result.fetchall()
     return result
-
 
 def get_user_city(city):
     query = db.text('SELECT username FROM user where user.city = :city')
-    raw_result = connection.execute(query, city=city)
+    raw_result = connection.execute(query , city = city)
     result = raw_result.fetchall()
     return result
 
-
 def get_supplier_city(city):
     query = db.text('SELECT name FROM supplier as s WHERE s.city = :city ')
-    raw_result = connection.execute(query, city=city)
+    raw_result = connection.execute(query , city = city)
     result = raw_result.fetchall()
     return result
 
