@@ -1,3 +1,5 @@
+from idlelib import query
+
 from tabulate import tabulate
 import sqlalchemy as db
 
@@ -5,7 +7,7 @@ import warnings
 
 warnings.filterwarnings("ignore")
 
-engine = db.create_engine('mysql+pymysql://root:                              @localhost:3306/DB_0101?charset=utf8mb4')
+engine = db.create_engine('mysql+pymysql://root:Yasaminazizi1380@localhost:3306/DB_0101?charset=utf8mb4')
 connection = engine.connect()
 
 IS_LOGGED_IN = False
@@ -69,7 +71,16 @@ def get_special_offer():
     raw_result = connection.execute(query)
     result = raw_result.fetchall()
     return result
-
+def get_item_sale(item):
+    query = db.text('SELECT SUM(ci.total_price) as total_sales_per_month FROM product p'
+    'JOIN product_supplier ps ON p.idproduct = ps.product_idproduct'
+    'JOIN cart_item ci ON ps.idproduct_supplier = ci.idproduct_supplier'
+    'JOIN cart c ON ci.cart_idcart = c.idcart'
+    'WHERE p.name = :item'
+    'AND c.date BETWEEN (NOW() - INTERVAL 1 MONTH) AND NOW()')
+    raw_result = connection.execute(query, item=item)
+    result = raw_result.fetchall()
+    return result
 
 def get_the_best_users():
     query = db.text('SELECT c.idcustomer , sum(b.price) as s '
