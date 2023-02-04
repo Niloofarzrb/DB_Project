@@ -8,35 +8,13 @@ CREATE TABLE IF NOT EXISTS bill (
   price VARCHAR(45) NOT NULL,
   PRIMARY KEY (idbill));
 
-insert into bill values(1100 ,'2022-08-15 02:41' , 10000000);
+insert into bill values(1100 ,'2022-08-15 02:41' , 10000000 );
 insert into bill values(1200 ,'2021-07-15 12:32' , 2500000);
-insert into bill values(1300 ,'2022-02-15 14:29' , 3700000);
+insert into bill values(1300 ,'2022-02-15 14:29' , 3700000 );
 insert into bill values(1400 ,'2022-05-15 06:41' , 5900000);
-insert into bill values(1500 ,'2021-11-15 14:51' , 8700000);
-insert into bill values(1600 ,'2022-03-15 16:51' , 9700000);
+insert into bill values(1500 ,'2021-11-15 14:51' , 8700000 );
+insert into bill values(1600 ,'2022-03-15 16:51' , 9700000 );
 
-CREATE TABLE IF NOT EXISTS transaction (
-  idtransaction INT NOT NULL,
-  bank_name VARCHAR(45) NULL,
-  type VARCHAR(45) NULL,
-  date DATETIME NOT NULL,
-  status VARCHAR(45) NOT NULL,
-  pro_name MEDIUMTEXT NULL,
-  bill_idbill INT NOT NULL,
-  PRIMARY KEY (idtransaction),
-  INDEX fk_transaction_bill1_idx (bill_idbill ASC),
-  CONSTRAINT fk_transaction_bill1
-    FOREIGN KEY (bill_idbill)
-    REFERENCES bill (idbill)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION);
-
-insert into transaction values(1 , 'tejarat' , '' , '2022-08-15 02:41' , '+' , 'galaxys7' , 1100  );
-insert into transaction values(2 , 'tejarat' , '' , '2021-07-15 12:32' , '+' , 'galaxys7' , 1200  );
-insert into transaction values(3 , 'tejarat' , '' , '2022-02-15 14:29' , '+' , 'galaxys7' , 1300  );
-insert into transaction values(4 , 'tejarat' , '' , '2022-05-15 06:41' , '+' , 'galaxys7' , 1400  );
-insert into transaction values(5 , 'tejarat' , '' , '2021-11-15 14:51' , '+' , 'galaxys7' , 1500  );
-insert into transaction values(6 , 'tejarat' , '' , '2022-03-15 16:51' , '+' , 'galaxys7' , 1600  );
 
 CREATE TABLE IF NOT EXISTS user (
 	iduser int not null,
@@ -71,22 +49,23 @@ CREATE TABLE IF NOT EXISTS customer (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
 
-insert into customer values(2 , 1);
-insert into customer values(5 , 1);
-insert into customer values(8 , 2);
-insert into customer values(11 , 4);
-insert into customer values(14 , 3);
-insert into customer values(17 , 6);
-insert into customer values(20 , 4);
-insert into customer values(23 , 6);
-insert into customer values(26 , 4);
-insert into customer values(29 , 6);
+insert into customer values(2 , 1 );
+insert into customer values(5 , 1 );
+insert into customer values(8 , 2 );
+insert into customer values(11 , 4 );
+insert into customer values(14 , 3 );
+insert into customer values(17 , 6 );
+insert into customer values(20 , 4 );
+insert into customer values(23 , 6 );
+insert into customer values(26 , 4 );
+insert into customer values(29 , 6 );
 
 CREATE TABLE IF NOT EXISTS supplier (
   idsupplier INT NOT NULL,
   name MEDIUMTEXT NULL,
   phone_number VARCHAR(63) NOT NULL,
   sales_number INT NOT NULL,
+  city longtext not null,
   user_iduser INT NOT NULL,
   PRIMARY KEY (idsupplier),
   INDEX fk_supplier_user1_idx (user_iduser ASC) ,
@@ -96,12 +75,12 @@ CREATE TABLE IF NOT EXISTS supplier (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
 
-insert into supplier values(150 , 'mohammadi' , 09356487562 , 52 ,1  );
-insert into supplier values(151 , 'sirosi' , 0933654821 , 35 , 2);
-insert into supplier values(152 , 'nejati' , 0912054876 , 25 , 3 );
-insert into supplier values(153 , 'razavi' , 0933654128 , 65 , 4);
-insert into supplier values(154 , 'saadati' , 0915874963  , 69, 5);
-insert into supplier values(155 , 'haraati' , 0936584216 ,53 , 6);
+insert into supplier values(150 , 'mohammadi' ,'sari', 09356487562 , 52 ,1  );
+insert into supplier values(151 , 'sirosi' ,'tehran' ,  0933654821 , 35 , 2);
+insert into supplier values(152 , 'nejati' ,'mashhad', 0912054876 , 25 , 3 );
+insert into supplier values(153 , 'razavi', 'sari' , 0933654128 , 65 , 4);
+insert into supplier values(154 , 'saadati' , 'sari' , 0915874963  , 69, 5);
+insert into supplier values(155 , 'haraati' ,'tehran', 0936584216 ,53 , 6);
 
 CREATE TABLE IF NOT EXISTS cart (
   idcart INT NOT NULL,
@@ -126,11 +105,59 @@ CREATE TABLE IF NOT EXISTS cart (
     ON UPDATE NO ACTION);
 
  INSERT INTO cart values (123 , ''  , '2022-08-15 02:41' , 10000000 , 2 , 1 , 1100 );
- INSERT INTO cart values (345 , ''  , '2022-02-15 14:29' , 2500000  , 5 , 2 , 1200 );
- INSERT INTO cart values (567 , ''  , '2022-05-15 06:41' , 3700000 , 20 , 3 , 1300  );
+ INSERT INTO cart values (345 , ''  , '2022-02-15 14:29' , 2500000  , 5 , 1 , 1200 );
+ INSERT INTO cart values (567 , ''  , '2022-05-15 06:41' , 3700000 , 20 , 4 , 1300  );
  INSERT INTO cart values (789 , ''  , '2021-11-15 14:51' ,  5900000 , 11 , 4 , 1400  );
- INSERT INTO cart values (258  , '' , '2022-03-15 16:51' ,  8700000 , 14 , 5 , 1500  );
- INSERT INTO cart values (369 , ''  , '2022-03-12 16:51' ,  9700000, 26 , 6 , 1600 );
+ INSERT INTO cart values (258  , '' , '2022-03-15 16:51' ,  8700000 , 14 , 3 , 1500  );
+ INSERT INTO cart values (369 , ''  , '2022-03-12 16:51' ,  9700000, 26 , 4 , 1600 );
+
+create table if not exists order_history(
+	idorder_history int not null,
+	idcart int not null,
+    idcustomer int not null,
+    primary key(idorder_history),
+    CONSTRAINT fk_order_customer1
+		FOREIGN KEY (idcustomer )
+		REFERENCES customer (idcustomer)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION,
+	INDEX fk_order_cart1_idx (idcart ASC),
+	CONSTRAINT fk_order_cart1
+		FOREIGN KEY (idcart)
+		REFERENCES cart (idcart)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION);
+
+
+CREATE TABLE IF NOT EXISTS transaction (
+  idtransaction INT NOT NULL,
+  bank_name VARCHAR(45) NULL,
+  type VARCHAR(45) NULL,
+  date DATETIME NOT NULL,
+  status VARCHAR(45) NOT NULL,
+  pro_name MEDIUMTEXT NULL,
+  bill_idbill INT NOT NULL,
+  idcart int not null,
+  PRIMARY KEY (idtransaction),
+  INDEX fk_transaction_bill1_idx (bill_idbill ASC),
+  CONSTRAINT fk_transaction_bill1
+    FOREIGN KEY (bill_idbill)
+    REFERENCES bill (idbill)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  INDEX fk_transaction_cart1_idx (idcart ASC) ,
+  CONSTRAINT fk_transaction_cart1
+    FOREIGN KEY (idcart)
+    REFERENCES cart (idcart)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+insert into transaction values(1 , 'tejarat' , '' , '2022-08-15 02:41' , '+' , 'galaxys7' , 1100 , 123 );
+insert into transaction values(2 , 'tejarat' , '' , '2021-07-15 12:32' , '+' , 'galaxys7' , 1200 , 345 );
+insert into transaction values(3 , 'tejarat' , '' , '2022-02-15 14:29' , '+' , 'galaxys7' , 1300 ,258 );
+insert into transaction values(4 , 'tejarat' , '' , '2022-05-15 06:41' , '+' , 'galaxys7' , 1400 , 567 );
+insert into transaction values(5 , 'tejarat' , '' , '2021-11-15 14:51' , '+' , 'galaxys7' , 1500  ,369);
+insert into transaction values(6 , 'tejarat' , '' , '2022-03-15 16:51' , '+' , 'galaxys7' , 1600  , 789);
 
 CREATE TABLE IF NOT EXISTS post (
   delivery_code INT NOT NULL,
@@ -259,35 +286,7 @@ insert into cart_item values(4 , 5900000 , 1  , 5100000  , 789 ,1);
 insert into cart_item values(5 , 8700000 , 3  , 7500000 , 258 ,2);
 insert into cart_item values(6 , 9700000 , 2  , 9100000 , 369 ,2);
 
-create table IF not exists cart_item_costumer(
-	id int not null,
-    idbill int not null, 
-    idcustomer int not null,
-    number  int not null,
-    primary key(id),
-    INDEX fk_cart_item_bill_idx (idbill ASC),
-	CONSTRAINT fk_cart_item_has_bill_bill1
-    FOREIGN KEY (idbill)
-    REFERENCES bill (idbill)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-	INDEX fk_cart_item_customer1_idx (idcustomer ASC) ,
-  CONSTRAINT fk_cart_item_customer1
-    FOREIGN KEY (idcustomer)
-    REFERENCES customer (idcustomer)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION);
 
-insert into cart_item_costumer values(1 , 1100 ,1 , 1);
-insert into cart_item_costumer values(2 , 1100 ,1 , 2);
-insert into cart_item_costumer values(3 , 1200 ,2 , 3);
-insert into cart_item_costumer values(4 , 1200 , 3, 4);
-insert into cart_item_costumer values(5 , 1300 ,4, 2);
-insert into cart_item_costumer values(6 , 1100 ,2 , 3);
-insert into cart_item_costumer values(7 , 1400 ,3 , 1);
-insert into cart_item_costumer values(8 , 1500 ,5 , 2);
-insert into cart_item_costumer values(9 , 1600 ,4, 5);
-insert into cart_item_costumer values(10 , 1300 ,6 , 5);
 
 CREATE TABLE IF NOT EXISTS offer (
   idoffer INT NOT NULL,
@@ -356,8 +355,8 @@ CREATE TABLE IF NOT EXISTS comment (
     ON UPDATE NO ACTION);
 
     insert into comment values(147 , 'perfect' , 4 , 1 , 2);
-    insert into comment values(123 , 'good' , 3 , 2 , 5);
-    insert into comment values(159 , 'bad' , 1 , 3 , 8);
-    insert into comment values(357 , 'good' , 4 , 4 , 11);
+    insert into comment values(123 , 'good' , 3 , 1 , 5);
+    insert into comment values(159 , 'bad' , 1 , 1 , 8);
+    insert into comment values(357 , 'good' , 4 , 1 , 11);
     insert into comment values(456 , 'perfect' , 4 , 5 , 14);
     insert into comment values(251 , 'aowful' , 0 , 6 , 17);
