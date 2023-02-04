@@ -128,8 +128,12 @@ def get_item_seller(item):
     result = raw_result.fetchall()
     return result
 
-def get_the_cheapest_seller_by_item(item):
-    raw_result = connection.execute(query , item = item)
+def get_the_cheapest_seller_by_item(product):
+    query = ('SELECT supplier_idsupplier , sum(s.price) as sum '
+             'FROM product_supplier as s '
+             'WHERE product_idproduct = :product and EXTRACT(MONTH FROM b.date) as m'
+             'group by supplier_idsupplier order by sum asc limit 1 ')
+    raw_result = connection.execute(query , product=product)
     result = raw_result.fetchall()
     return result
 
