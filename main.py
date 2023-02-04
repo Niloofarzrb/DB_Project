@@ -112,7 +112,7 @@ def get_bestselling_products():
                     'WHERE tr.status ='+' and  EXTRACT(WEEK FROM b.date) as w'
                     'group by p.idproduct order by s asc limit 5')
 
-    query = db.text('SELECT pr.idproduct , sum(ci.sales_number) as sum '
+    query1 = db.text('SELECT pr.idproduct , sum(ci.sales_number) as sum '
                     'FROM cart_item as ci '
                     'join product_supplier as psu on psu.idproduct_supplier = ci.idproduct_supplier'
                     ' join product as pr on pr.idproduct = ps.product_idproduct'
