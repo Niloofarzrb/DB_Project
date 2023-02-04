@@ -106,6 +106,12 @@ def get_last_order(idcustomer):
     result = raw_result.fetchall()
     return result
 
+def get_comment(idproduct):
+    query = db.text('SELECT description FROM comment as c WHERE c.product_idproduct = :idproduct')
+    raw_result = connection.execute(query , idproduct = idproduct)
+    result = raw_result.fetchall()
+    return result
+
 
 if __name__ == '__main__':
     print('Welcome to our shop!')
