@@ -63,9 +63,9 @@ insert into customer values(29 , 6 );
 CREATE TABLE IF NOT EXISTS supplier (
   idsupplier INT NOT NULL,
   name MEDIUMTEXT NULL,
+   city longtext not null,
   phone_number VARCHAR(63) NOT NULL,
   sales_number INT NOT NULL,
-  city longtext not null,
   user_iduser INT NOT NULL,
   PRIMARY KEY (idsupplier),
   INDEX fk_supplier_user1_idx (user_iduser ASC) ,
@@ -205,6 +205,7 @@ CREATE TABLE IF NOT EXISTS product (
   model MEDIUMTEXT NOT NULL,
   ph_date DATETIME NOT NULL,
   supplier_idsupplier INT NOT NULL,
+  count int not null,
   PRIMARY KEY (idproduct),
   INDEX fk_product_price_history1_idx (ph_date ASC) ,
   INDEX fk_product_supplier1_idx (supplier_idsupplier ASC) ,
@@ -219,12 +220,12 @@ CREATE TABLE IF NOT EXISTS product (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
 
-INSERT INTO product values (1 , 'red' , '+' , 'galaxys7','sumsung' ,'2022-08-15 02:41' , 150);
-INSERT INTO product values (2 , 'gold' , '+'  ,'iphone12promax','iphone' ,'2021-07-15 12:32' , 151);
-INSERT INTO product values (3 , 'black' , '+'  ,'galaxynote10', 'sumsung' ,'2022-02-15 14:29' , 152);
-INSERT INTO product values (4 , 'white' , '+'  ,'iphonex','iphone' ,'2022-05-15 06:41' , 153);
-INSERT INTO product values (5 , 'black' , '+'  ,'sonyxperia','sony' ,'2021-11-15 14:51' , 154);
-INSERT INTO product values (6 , 'rosegold' , '+' , 'a7','sumsung' ,'2022-03-12 16:51' , 155);
+INSERT INTO product values (1 , 'red' , '+' , 'galaxys7','sumsung' ,'2022-08-15 02:41' , 150, 5 );
+INSERT INTO product values (2 , 'gold' , '+'  ,'iphone12promax','iphone' ,'2021-07-15 12:32'  , 151, 3);
+INSERT INTO product values (3 , 'black' , '+'  ,'galaxynote10', 'sumsung' ,'2022-02-15 14:29' , 152,5);
+INSERT INTO product values (4 , 'white' , '+'  ,'iphonex','iphone' ,'2022-05-15 06:41', 153 ,6);
+INSERT INTO product values (5 , 'black' , '+'  ,'sonyxperia','sony' ,'2021-11-15 14:51' , 154,5);
+INSERT INTO product values (6 , 'rosegold' , '+' , 'a7','sumsung' ,'2022-03-12 16:51' , 155,2);
 
 create table product_supplier
 (
