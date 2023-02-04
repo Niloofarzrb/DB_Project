@@ -135,6 +135,12 @@ def get_user_city(city):
     result = raw_result.fetchall()
     return result
 
+def get_supplier_city(city):
+    query = db.text('SELECT name FROM supplier as s WHERE s.city = :city ')
+    raw_result = connection.execute(query , city = city)
+    result = raw_result.fetchall()
+    return result
+
 
 if __name__ == '__main__':
     print('Welcome to our shop!')
