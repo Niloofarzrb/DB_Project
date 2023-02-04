@@ -135,11 +135,11 @@ def get_the_cheapest_seller_by_item(item):
 
 def avg_sell_by_supplier(item):
     query = db.text(
-        'select name, date, avg(cart_item.total_cost) FROM product_supplier, cart'
-            'JOIN supplier ON product_supplier.supplier_idsupplier = supplier.idsupplier'
-            'JOIN cart_item On cart_item.idproduct_supplier = product_supplier.idproduct_supplier'
-            'JOIN cart ON cart_item.cart_idcart = cart.idcart'
-            'GROUP BY product_supplier.supplier_idsupplier, date')
+        'SELECT  AVG(c.total_price) as average_sales_per_month '
+        'FROM cart  c JOIN cart_item ci ON c.idcart = ci.cart_idcart'
+        'JOIN product_supplier ps ON ci.idproduct_supplier = ps.idproduct_supplier'
+        'JOIN product p ON ps.product_idproduct = p.idproduct'
+        'WHERE c.date BETWEEN (NOW() - INTERVAL 1 MONTH) AND NOW()')
     raw_result = connection.execute(query, item=item)
     result = raw_result.fetchall()
     return result
