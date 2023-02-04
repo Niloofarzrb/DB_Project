@@ -118,7 +118,9 @@ def get_item_seller(item):
     return result
 
 def get_the_cheapest_seller_by_item(item):
-    pass
+    raw_result = connection.execute(query , item = item)
+    result = raw_result.fetchall()
+    return result
 
 def avg_sell_by_supplier(item):
     query = db.text(
