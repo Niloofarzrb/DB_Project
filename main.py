@@ -80,7 +80,7 @@ def get_the_best_users():
                     'FROM bill as b '
                     'group by c.idcustomer order by s desc limit 10')
 
-    query1 = db.text('SELECT c.idcustomer , sum(b.price) as sum '
+    query1 = db.text('SELECT cu.idcustomer , sum(b.price) as sum '
                     'FROM customer as cu '
                     'join cart on cart.idcostumer = cu.idcustomer '
                     'join transaction as tr on tr.idcart = cart.idcart '
@@ -93,6 +93,21 @@ def get_the_best_users():
 
 
 def get_bestselling_products():
+    query = db.text('SELECT p.idproduct , sum(c.sales_number) as s '
+                    'FROM cart_item as c '
+                    'join product_supplier as ps on ps.idproduct_supplier = c.idproduct_supplier'
+                    ' join product as p on p.idproduct = ps.product_idproduct'
+                    'join transaction as tr'
+                    'WHERE tr.status ='+' and  EXTRACT(WEEK FROM b.date) as w'
+                    'group by p.idproduct order by s asc limit 5')
+
+    query = db.text('SELECT pr.idproduct , sum(ci.sales_number) as sum '
+                    'FROM cart_item as ci '
+                    'join product_supplier as psu on psu.idproduct_supplier = ci.idproduct_supplier'
+                    ' join product as pr on pr.idproduct = ps.product_idproduct'
+                    ' join transaction as t'
+                    ' WHERE t.status =' + ' and EXTRACT(MONTH FROM b.date) as m'
+                    ' group by pr.idproduct order by sum asc limit 5')
     pass
 
 
