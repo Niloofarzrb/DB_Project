@@ -88,6 +88,7 @@ async def get_users():
         message = 'You are not logged in! Please login first!'
 
     return {'message': message, 'result': result, 'result_count': len(result)}
+
 @app.get("/categories")
 async def get_categories():
     if IS_LOGGED_IN:
