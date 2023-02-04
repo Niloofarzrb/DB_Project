@@ -71,23 +71,11 @@ def get_bestselling_products():
     pass
 
 
-def get_special_offer():
-    # get list of products that have discount more than 15%
-    query = db.text('SELECT product_idproduct as pro '
-                    'FROM offer '
-                    'WHERE discount_rate > 15')
+def get_item_seller(item):
+    query = db.text('SELECT iduser , username as n FROM user  , product_supplier as ps where ')
     raw_result = connection.execute(query)
     result = raw_result.fetchall()
     return result
-
-
-def get_item_seller(item):
-    query = db.text(
-        'SELECT users.name, users.surname FROM users JOIN products ON users.id = products.seller_id WHERE products.id = :item')
-    raw_result = connection.execute(query, item=item)
-    result = raw_result.fetchall()
-    return result
-
 
 def get_the_cheapest_seller_by_item(item):
     pass
