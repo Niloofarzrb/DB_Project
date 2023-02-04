@@ -61,6 +61,14 @@ def get_orders():
     raw_result = connection.execute(query)
     result = raw_result.fetchall()
     return result
+def get_special_offer():
+    # get list of products that have discount more than 15%
+    query = db.text('SELECT product_idproduct as pro '
+                    'FROM offer '
+                    'WHERE discount_rate > 15')
+    raw_result = connection.execute(query)
+    result = raw_result.fetchall()
+    return result
 
 
 def get_the_best_users():
