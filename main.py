@@ -72,7 +72,24 @@ def get_special_offer():
 
 
 def get_the_best_users():
-    pass
+    query = db.text('SELECT c.idcustomer , sum(b.price) as s '
+                    'FROM customer as c '
+                    'join cart on cart.idcostumer = c.idcustomer '
+                    'join transaction as t on t.idcart = cart.idcart '
+                    'WHERE t.status = '+' and EXTRACT(WEEK FROM b.date) as w '
+                    'FROM bill as b '
+                    'group by c.idcustomer order by s desc limit 10')
+
+    query1 = db.text('SELECT c.idcustomer , sum(b.price) as sum '
+                    'FROM customer as cu '
+                    'join cart on cart.idcostumer = cu.idcustomer '
+                    'join transaction as tr on tr.idcart = cart.idcart '
+                    'WHERE tr.status = ' + ' and EXTRACT(MONTH FROM b.date) as m '
+                    'FROM bill as b '
+                    'group by cu.idcustomer order by sum desc limit 10')
+    raw_result = connection.execute(query , query1)
+    result = raw_result.fetchall()
+    return result
 
 
 def get_bestselling_products():
@@ -103,6 +120,12 @@ def get_last_order(idcustomer):
     query = db.text('SELECT idorder_history FROM order_history where  idcustomer = :idcustomer '
                     'order  by sum(idorder_history) desc limit 10')
     raw_result = connection.execute(query , idcustomer = idcustomer)
+    result = raw_result.fetchall()
+    return result
+
+def get_comment(idproduct):
+    query = db.text('SELECT description FROM comment as c WHERE c.product_idproduct = :idproduct')
+    raw_result = connection.execute(query , idproduct = idproduct)
     result = raw_result.fetchall()
     return result
 
