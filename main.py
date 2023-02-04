@@ -5,7 +5,7 @@ import warnings
 
 warnings.filterwarnings("ignore")
 
-engine = db.create_engine('mysql+pymysql://root:Niloo8580far@localhost:3306/DB_0101?charset=utf8mb4')
+engine = db.create_engine('mysql+pymysql://root:                              @localhost:3306/DB_0101?charset=utf8mb4')
 connection = engine.connect()
 
 IS_LOGGED_IN = False
@@ -126,6 +126,12 @@ def get_last_order(idcustomer):
 def get_comment(idproduct):
     query = db.text('SELECT description FROM comment as c WHERE c.product_idproduct = :idproduct')
     raw_result = connection.execute(query , idproduct = idproduct)
+    result = raw_result.fetchall()
+    return result
+
+def get_user_city(city):
+    query = db.text('SELECT username FROM user where user.city = :city')
+    raw_result = connection.execute(query , city = city)
     result = raw_result.fetchall()
     return result
 
