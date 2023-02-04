@@ -81,6 +81,13 @@ def get_item_sale(item):
     raw_result = connection.execute(query, item=item)
     result = raw_result.fetchall()
     return result
+def get_supplier_product_for_admin(product):
+    query = db.text('SELECT supplier_idsupllier  '
+                    'FROM product_supplier as s'
+                    ' where s.product_idproduct = :product')
+    raw_result = connection.execute(query, product=product)
+    result = raw_result.fetchall()
+    return result
 
 def get_the_best_users():
     query = db.text('SELECT c.idcustomer , sum(b.price) as s '
@@ -122,11 +129,6 @@ def get_bestselling_products():
     pass
 
 
-def get_item_seller(item):
-    query = db.text('SELECT iduser , username as n FROM user  , product_supplier as ps where ')
-    raw_result = connection.execute(query)
-    result = raw_result.fetchall()
-    return result
 
 def get_the_cheapest_seller_by_item(product):
     query = ('SELECT supplier_idsupplier , sum(s.price) as sum '
