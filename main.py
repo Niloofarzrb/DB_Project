@@ -103,6 +103,13 @@ def avg_sell_by_supplier(item):
     result = raw_result.fetchall()
     return result
 
+def get_last_order(idcustomer):
+    query = db.text('SELECT idorder_history FROM order_history where  idcustomer = :idcustomer '
+                    'order  by sum(idorder_history) desc limit 10')
+    raw_result = connection.execute(query , idcustomer = idcustomer)
+    result = raw_result.fetchall()
+    return result
+
 
 if __name__ == '__main__':
     print('Welcome to our shop!')
