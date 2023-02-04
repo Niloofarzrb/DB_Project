@@ -149,6 +149,11 @@ def get_best_Score(idproduct):
     raw_result = connection.execute(query , idproduct = idproduct)
     result = raw_result.fetchall()
     return result
+def get_bad_Score(idproduct):
+    query = db.text('SELECT descript FROM comment as c WHERE c.product_idproduct = :idproduct order by c.score asc limit 3')
+    raw_result = connection.execute(query , idproduct = idproduct)
+    result = raw_result.fetchall()
+    return result
 
 def get_user_city(city):
     query = db.text('SELECT username FROM user where user.city = :city')
