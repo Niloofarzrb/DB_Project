@@ -83,9 +83,9 @@ def get_item_sale(item):
     query = db.text('SELECT SUM(ci.total_price) as total_sales_per_month FROM product p'
                     'JOIN product_supplier ps ON p.idproduct = ps.product_idproduct'
                     'JOIN cart_item ci ON ps.idproduct_supplier = ci.idproduct_supplier'
-    'JOIN cart c ON ci.cart_idcart = c.idcart'
-    'WHERE p.name = :item'
-    'AND c.date BETWEEN (NOW() - INTERVAL 1 MONTH) AND NOW()')
+                    'JOIN cart c ON ci.cart_idcart = c.idcart'
+                    'WHERE p.name = :item'
+                    'AND c.date BETWEEN (NOW() - INTERVAL 1 MONTH) AND NOW()')
     raw_result = connection.execute(query, item=item)
     result = raw_result.fetchall()
     return result
@@ -100,8 +100,8 @@ def get_the_best_users():
                     'group by c.idcustomer order by s desc limit 10')
 
     query1 = db.text('SELECT cu.idcustomer , sum(b.price) as sum '
-                    'FROM customer as cu '
-                    'join cart on cart.idcostumer = cu.idcustomer '
+                     'FROM customer as cu '
+                     'join cart on cart.idcostomer = cu.idcustomer '
                     'join transaction as tr on tr.idcart = cart.idcart '
                     'WHERE tr.status = ' + ' and EXTRACT(MONTH FROM b.date) as m '
                     'FROM bill as b '

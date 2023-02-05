@@ -128,6 +128,11 @@ create table if not exists order_history(
 		ON DELETE NO ACTION
 		ON UPDATE NO ACTION);
 
+insert into order_history values(1 , 123 , 2);
+insert into order_history values(2 , 345 , 5);
+insert into order_history values(3 , 567 , 8);
+insert into order_history values(4 , 789 , 11);
+insert into order_history values(5 , 258 , 14);
 
 CREATE TABLE IF NOT EXISTS transaction (
   idtransaction INT NOT NULL,
