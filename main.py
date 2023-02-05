@@ -78,6 +78,7 @@ def get_special_offer():
     raw_result = connection.execute(query)
     result = raw_result.fetchall()
     return result
+
 def get_item_sale(item):
     query = db.text('SELECT SUM(ci.total_price) as total_sales_per_month FROM product p'
                     'JOIN product_supplier ps ON p.idproduct = ps.product_idproduct'
@@ -131,11 +132,6 @@ def get_bestselling_products():
     return result
 
 
-def get_item_seller(item):
-    query = db.text('SELECT iduser , username as n FROM user  , product_supplier as ps where ')
-    raw_result = connection.execute(query)
-    result = raw_result.fetchall()
-    return result
 
 def get_the_cheapest_seller_by_item(product):
         query = ('SELECT supplier_idsupplier , sum(s.price) as sum '
@@ -147,16 +143,7 @@ def get_the_cheapest_seller_by_item(product):
         return result
 
 
-def avg_sell_by_supplier(item):
-    query = db.text(
-        'SELECT  AVG(c.total_price) as average_sales_per_month '
-        'FROM cart  c JOIN cart_item ci ON c.idcart = ci.cart_idcart'
-        'JOIN product_supplier ps ON ci.idproduct_supplier = ps.idproduct_supplier'
-        'JOIN product p ON ps.product_idproduct = p.idproduct'
-        'WHERE c.date BETWEEN (NOW() - INTERVAL 1 MONTH) AND NOW()')
-    raw_result = connection.execute(query, item=item)
-    result = raw_result.fetchall()
-    return result
+
 
 def get_last_order(idcustomer):
     query = db.text('SELECT idorder_history FROM order_history where  idcustomer = :idcustomer '
@@ -206,6 +193,13 @@ def get_avg_sell_by_supplier(item):
     result = raw_result.fetchall()
     return result
 
+def get_supplier_product_for_admin(product):
+    query = db.text('SELECT supplier_idsupllier  '
+                    'FROM product_supplier as s'
+                    ' where s.product_idproduct = :product')
+    raw_result = connection.execute(query, product=product)
+    result = raw_result.fetchall()
+    return result
 
 def add_product(color, available, name, model, ph_date, supplier_idsupplier):
     idproduct = random.randint(100, 1000)
@@ -249,6 +243,7 @@ if __name__ == '__main__':
         print('22. Edit users')
         print('23. Logout')
         print('24. Exit')
+        print('25. Get supplier product')
         choice = input('Enter your choice: ')
         if choice == '1':
             login(input('Enter username: '), input('Enter password: '))
@@ -287,14 +282,30 @@ if __name__ == '__main__':
                 offers = [offer.values() for offer in get_special_offer()]
                 print(tabulate(offers, headers=['idproduct']))
             elif choice == '9':
-                seller = [sell.values() for sell in get_item_sale(input('Enter item:'))]
-                print(tabulate(seller, headers=['total_price']))
+                if IS_ADMIN:
+                    seller = [sell.values() for sell in get_item_sale(input('Enter item:'))]
+                    print(tabulate(seller, headers=['total_price']))
+                else:
+                    print('You must be admin to call this function!')
             elif choice == '10':
-                cheapest = [cheap_seller.values() for cheap_seller in get_the_cheapest_seller_by_item(input('Enter product:'))]
-                print(tabulate(cheapest, headers=['idsupplier',  'price']))
+                if IS_ADMIN:
+                    cheapest = [cheap_seller.values() for cheap_seller in
+                                get_the_cheapest_seller_by_item(input('Enter product:'))]
+                    print(tabulate(cheapest, headers=['idsupplier', 'price']))
+                else:
+                    print('You must be admin to call this function!')
             elif choice == '11':
-                avg_sell = [avg.values() for avg in get_avg_sell_by_supplier(input('Enter item:'))]
-                print(tabulate(avg_sell, headers=['total_price']))
+                if IS_ADMIN:
+                    avg_sell = [avg.values() for avg in get_avg_sell_by_supplier(input('Enter item:'))]
+                    print(tabulate(avg_sell, headers=['total_price']))
+                else:
+                    print('You must be admin to call this function!')
+            elif choice == '25':
+                if IS_ADMIN:
+                    supplier_product = [supplier.values() for supplier in get_supplier_product_for_admin(input('Enter product:'))]
+                    print(tabulate(supplier_product, headers=['supplier_idsupplier']))
+                else:
+                    print('You must be admin to call this function!')
             elif choice == '12':
                 last_order = [order.values() for order in get_last_order(input('Enter customer:'))]
                 print(tabulate(last_order, headers=['idorder_history']))
