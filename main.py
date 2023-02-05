@@ -7,7 +7,7 @@ import warnings
 
 warnings.filterwarnings("ignore")
 
-engine = db.create_engine('mysql+pymysql://root:admin@localhost:3306/DB_0101?charset=utf8mb4')
+engine = db.create_engine('mysql+pymysql://root:8676299@localhost:3306/DB_0101?charset=utf8mb4')
 connection = engine.connect()
 
 IS_LOGGED_IN = False
@@ -44,7 +44,7 @@ def register(username, password, first_name, last_name, email_address, city, str
     raw_result = connection.execute(query, iduser=iduser, username=username, role=role, password=password, first_name=first_name, last_name=last_name, email_address=email_address, city=city, street=street, phone_number=phone_number)
 
 def get_products():
-    query = db.text('SELECT idproduct, color, available, price, name, model, ph_date FROM product')
+    query = db.text('SELECT idproduct, color, available,  name, model, ph_date FROM product')
     raw_result = connection.execute(query)
     result = raw_result.fetchall()
     return result
@@ -262,10 +262,10 @@ if __name__ == '__main__':
             if choice == '2':
                 products = [product.values() for product in get_products()]
                 print(tabulate(products,
-                               headers=['idproduct', 'color', 'available', 'price', 'name', 'model', 'ph_date']))
+                               headers=['idproduct', 'color', 'available', 'name', 'model', 'ph_date']))
             elif choice == '3':
                 users = map(lambda x: list(x), get_users())
-                print(tabulate(users, headers=['id', 'password']))
+                print(tabulate(users, headers=['iduser', 'username', 'role' , 'password' , 'firstname', 'lastname','email','city', 'street','phonenumber']))
             elif choice == '4':
                 categories = [category.values() for category in get_categories()]
                 print(tabulate(categories, headers=['name']))
